@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Never Have I Ever - The Ultimate Party Game for Apple TV</title>
+    <meta name="description" content="Turn any gathering into an unforgettable party with Never Have I Ever for Apple TV. 90+ statements, custom cards, achievements, and more!">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .hero {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 40px 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .feature h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #ff6b6b;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .info-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-section li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .info-section li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        footer a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .pricing {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 40px;
+            border-radius: 20px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .pricing h2 {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .price-tag {
+            font-size: 3em;
+            font-weight: bold;
+            color: #2d3436;
+            margin: 20px 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .subtitle {
+                font-size: 1.2em;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Never Have I Ever</h1>
+            <p class="subtitle">The Ultimate Party Game for Apple TV</p>
+        </header>
+
+        <div class="hero">
+            <h2 style="text-align: center; color: #667eea; font-size: 2.5em; margin-bottom: 30px;">
+                Turn Any Gathering Into An Unforgettable Party
+            </h2>
+            <p style="text-align: center; font-size: 1.2em; max-width: 800px; margin: 0 auto;">
+                The classic icebreaker game reimagined for your Apple TV. Bring laughter and memorable moments
+                to your living room with 90+ pre-loaded statements, custom cards, achievements, and more!
+            </p>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>90+ Statements</h3>
+                <p>Pre-loaded questions across 6 categories: General, Wild, Funny, Adventure, Food, and Travel.</p>
+            </div>
+            <div class="feature">
+                <h3>Custom Statements</h3>
+                <p>Create your own personalized statements. Free users get 5, premium users get unlimited!</p>
+            </div>
+            <div class="feature">
+                <h3>16 Achievements</h3>
+                <p>Unlock badges as you play. Track your progress and complete challenges.</p>
+            </div>
+            <div class="feature">
+                <h3>Spicy Category</h3>
+                <p>Unlock 20+ exclusive romantic statements for adults-only parties (premium feature).</p>
+            </div>
+            <div class="feature">
+                <h3>Beautiful Design</h3>
+                <p>Stunning gradients, smooth animations, and an interface optimized for Apple TV.</p>
+            </div>
+            <div class="feature">
+                <h3>No Ads</h3>
+                <p>Enjoy uninterrupted gameplay. No ads means non-stop fun with your friends.</p>
+            </div>
+        </div>
+
+        <div class="pricing">
+            <h2>Download Free Today!</h2>
+            <p style="font-size: 1.2em; margin: 20px 0;">
+                Get started with 90+ statements and 5 custom cards for free.
+            </p>
+            <div class="price-tag">FREE</div>
+            <p style="font-size: 1em; opacity: 0.8;">
+                Optional premium unlock: $4.99 for unlimited custom statements and exclusive Spicy category
+            </p>
+        </div>
+
+        <div class="info-section">
+            <h2>How to Play</h2>
+            <ol style="padding-left: 20px;">
+                <li style="margin: 15px 0;">Gather your friends around the TV</li>
+                <li style="margin: 15px 0;">Select your favorite categories</li>
+                <li style="margin: 15px 0;">Read each "Never Have I Ever" statement</li>
+                <li style="margin: 15px 0;">Those who HAVE done it raise their hand or take a sip</li>
+                <li style="margin: 15px 0;">Discover hilarious stories and surprising secrets!</li>
+            </ol>
+        </div>
+
+        <div class="info-section">
+            <h2>Perfect For</h2>
+            <ul>
+                <li>House parties and gatherings</li>
+                <li>Game nights with friends</li>
+                <li>Breaking the ice with new people</li>
+                <li>College parties and dorm fun</li>
+                <li>Date nights and couples</li>
+                <li>Family reunions (family-friendly mode available)</li>
+                <li>Team building events</li>
+                <li>Bachelorette and bachelor parties</li>
+            </ul>
+        </div>
+
+        <div class="info-section">
+            <h2>Premium Features ($4.99)</h2>
+            <ul>
+                <li>Spicy Category - 20+ exclusive romantic statements for adult parties</li>
+                <li>Unlimited Custom Statements - Create as many as you want</li>
+                <li>Premium Themes - Customize your visual experience</li>
+                <li>Cloud Sync - Save custom statements across devices</li>
+                <li>All Achievements - Complete access to every badge</li>
+                <li>One-time purchase - Lifetime access, no subscription</li>
+            </ul>
+        </div>
+
+        <div class="cta-section">
+            <h2 style="font-size: 2.5em; margin-bottom: 20px;">Ready to Party?</h2>
+            <p style="font-size: 1.3em; margin-bottom: 20px;">
+                Download Never Have I Ever on the App Store for Apple TV
+            </p>
+            <a href="#" class="cta-button">Download on App Store</a>
+            <p style="margin-top: 30px; font-size: 0.9em; opacity: 0.9;">
+                Coming soon: iPhone and iPad versions with universal purchase
+            </p>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 Never Have I Ever. All rights reserved.</p>
+            <div style="margin-top: 20px;">
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="terms.html">Terms & Conditions</a>
+                <a href="support.html">Support</a>
+                <a href="https://github.com/DiNerdyYawdie/Never-Have-I-Ever">GitHub</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
