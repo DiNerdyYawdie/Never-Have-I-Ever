@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var gameManager = GameManager()
+    @StateObject private var achievementManager = AchievementManager()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        MainMenuView()
+            .environmentObject(gameManager)
+            .environmentObject(achievementManager)
+            .onAppear {
+                gameManager.achievementManager = achievementManager
+            }
     }
 }
 
