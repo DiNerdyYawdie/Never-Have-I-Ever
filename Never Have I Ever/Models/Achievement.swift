@@ -7,7 +7,8 @@
 
 import Foundation
 import SwiftUI
-import Combine
+
+// MARK: - Achievement
 
 /// Represents an achievement that can be unlocked
 struct Achievement: Identifiable, Codable, Equatable {
@@ -19,12 +20,12 @@ struct Achievement: Identifiable, Codable, Equatable {
     var isUnlocked: Bool = false
     var progress: Int = 0
     var unlockedDate: Date?
-    
+
     var progressPercentage: Double {
         guard requirement > 0 else { return 0 }
         return Double(progress) / Double(requirement)
     }
-    
+
     var iconColor: Color {
         switch category {
         case .gameplay: return .blue
@@ -33,11 +34,11 @@ struct Achievement: Identifiable, Codable, Equatable {
         case .special: return .purple
         }
     }
-    
+
     var category: AchievementCategory {
         AchievementCategory(rawValue: id.components(separatedBy: "_").first ?? "gameplay") ?? .gameplay
     }
-    
+
     enum AchievementCategory: String, Codable {
         case gameplay
         case custom
@@ -46,18 +47,87 @@ struct Achievement: Identifiable, Codable, Equatable {
     }
 }
 
+// MARK: - AchievementManager
+
 /// Manages achievements and progress
-class AchievementManager: ObservableObject {
-    @Published var achievements: [Achievement] = []
-    @Published var newlyUnlockedAchievements: [Achievement] = []
-    
+@Observable
+@MainActor
+class AchievementManager {
+
+    // MARK: - Properties
+
+    var achievements: [Achievement] = []
+    var newlyUnlockedAchievements: [Achievement] = []
+
     private let userDefaultsKey = "unlockedAchievements"
-    
+
     init() {
         setupAchievements()
         loadProgress()
     }
-    
+
+    // MARK: - Methods
+
+    func updateProgress(for achievementId: String, progress: Int) {
+        guard let index = achievements.firstIndex(where: { $0.id == achievementId }) else { return }
+
+        if !achievements[index].isUnlocked {
+            achievements[index].progress = progress
+
+            if progress >= achievements[index].requirement {
+                unlockAchievement(achievementId)
+            }
+        }
+    }
+
+    func incrementProgress(for achievementId: String, by amount: Int = 1) {
+        guard let index = achievements.firstIndex(where: { $0.id == achievementId }) else { return }
+
+        if !achievements[index].isUnlocked {
+            achievements[index].progress += amount
+
+            if achievements[index].progress >= achievements[index].requirement {
+                unlockAchievement(achievementId)
+            }
+        }
+    }
+
+    func unlockAchievement(_ achievementId: String) {
+        guard let index = achievements.firstIndex(where: { $0.id == achievementId }) else { return }
+
+        if !achievements[index].isUnlocked {
+            achievements[index].isUnlocked = true
+            achievements[index].unlockedDate = Date.now
+            achievements[index].progress = achievements[index].requirement
+
+            newlyUnlockedAchievements.append(achievements[index])
+
+            saveProgress()
+            SoundManager.shared.playSound(.celebration)
+        }
+    }
+
+    func clearNewlyUnlocked() {
+        newlyUnlockedAchievements.removeAll()
+    }
+
+    // MARK: - Stats
+
+    var unlockedCount: Int {
+        achievements.count(where: { $0.isUnlocked })
+    }
+
+    var totalCount: Int {
+        achievements.count
+    }
+
+    var completionPercentage: Double {
+        guard totalCount > 0 else { return 0 }
+        return Double(unlockedCount) / Double(totalCount)
+    }
+
+    // MARK: - Private
+
     private func setupAchievements() {
         achievements = [
             // Gameplay Achievements
@@ -103,7 +173,7 @@ class AchievementManager: ObservableObject {
                 iconName: "crown.fill",
                 requirement: 1000
             ),
-            
+
             // Custom Statement Achievements
             Achievement(
                 id: "custom_first",
@@ -133,7 +203,7 @@ class AchievementManager: ObservableObject {
                 iconName: "hammer.fill",
                 requirement: 1
             ),
-            
+
             // Category Achievements
             Achievement(
                 id: "gameplay_all_categories",
@@ -149,7 +219,7 @@ class AchievementManager: ObservableObject {
                 iconName: "checkmark.seal.fill",
                 requirement: 1
             ),
-            
+
             // Social Achievements
             Achievement(
                 id: "social_10_games",
@@ -165,7 +235,7 @@ class AchievementManager: ObservableObject {
                 iconName: "speaker.wave.2.fill",
                 requirement: 1
             ),
-            
+
             // Special Achievements
             Achievement(
                 id: "special_night_owl",
@@ -183,75 +253,13 @@ class AchievementManager: ObservableObject {
             )
         ]
     }
-    
-    // MARK: - Progress Tracking
-    
-    func updateProgress(for achievementId: String, progress: Int) {
-        guard let index = achievements.firstIndex(where: { $0.id == achievementId }) else { return }
-        
-        if !achievements[index].isUnlocked {
-            achievements[index].progress = progress
-            
-            if progress >= achievements[index].requirement {
-                unlockAchievement(achievementId)
-            }
-        }
-    }
-    
-    func incrementProgress(for achievementId: String, by amount: Int = 1) {
-        guard let index = achievements.firstIndex(where: { $0.id == achievementId }) else { return }
-        
-        if !achievements[index].isUnlocked {
-            achievements[index].progress += amount
-            
-            if achievements[index].progress >= achievements[index].requirement {
-                unlockAchievement(achievementId)
-            }
-        }
-    }
-    
-    func unlockAchievement(_ achievementId: String) {
-        guard let index = achievements.firstIndex(where: { $0.id == achievementId }) else { return }
-        
-        if !achievements[index].isUnlocked {
-            achievements[index].isUnlocked = true
-            achievements[index].unlockedDate = Date()
-            achievements[index].progress = achievements[index].requirement
-            
-            newlyUnlockedAchievements.append(achievements[index])
-            
-            saveProgress()
-            SoundManager.shared.playSound(.celebration)
-        }
-    }
-    
-    func clearNewlyUnlocked() {
-        newlyUnlockedAchievements.removeAll()
-    }
-    
-    // MARK: - Stats
-    
-    var unlockedCount: Int {
-        achievements.filter { $0.isUnlocked }.count
-    }
-    
-    var totalCount: Int {
-        achievements.count
-    }
-    
-    var completionPercentage: Double {
-        guard totalCount > 0 else { return 0 }
-        return Double(unlockedCount) / Double(totalCount)
-    }
-    
-    // MARK: - Persistence
-    
+
     private func saveProgress() {
         if let encoded = try? JSONEncoder().encode(achievements) {
             UserDefaults.standard.set(encoded, forKey: userDefaultsKey)
         }
     }
-    
+
     private func loadProgress() {
         if let data = UserDefaults.standard.data(forKey: userDefaultsKey),
            let decoded = try? JSONDecoder().decode([Achievement].self, from: data) {

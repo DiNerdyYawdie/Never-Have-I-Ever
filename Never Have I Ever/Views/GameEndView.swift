@@ -9,8 +9,8 @@ import SwiftUI
 
 /// End screen shown when all statements are completed
 struct GameEndView: View {
-    @EnvironmentObject private var gameManager: GameManager
-    @EnvironmentObject private var achievementManager: AchievementManager
+    @Environment(GameManager.self) private var gameManager
+    @Environment(AchievementManager.self) private var achievementManager
     @Environment(\.dismiss) private var dismiss
     let wasCustomOnly: Bool
     let totalPlayed: Int
@@ -96,7 +96,8 @@ struct GameEndView: View {
                         Button {
                             gameManager.soundManager.playSound(.success)
                             dismiss()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            Task {
+                                try? await Task.sleep(for: .milliseconds(100))
                                 gameManager.startGame()
                             }
                         } label: {
@@ -163,7 +164,7 @@ struct GameEndView: View {
         }
         .fullScreenCover(isPresented: $showingAddCustom) {
             CustomStatementsView()
-                .environmentObject(gameManager)
+                .environment(gameManager)
         }
         .onAppear {
             gameManager.soundManager.playSound(.celebration)
@@ -193,5 +194,6 @@ struct GameEndView: View {
 
 #Preview {
     GameEndView(wasCustomOnly: false, totalPlayed: 70)
-        .environmentObject(GameManager())
+        .environment(GameManager())
+        .environment(AchievementManager())
 }

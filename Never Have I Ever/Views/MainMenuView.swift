@@ -9,8 +9,8 @@ import SwiftUI
 
 /// Main menu view with Liquid Glass design
 struct MainMenuView: View {
-    @EnvironmentObject private var gameManager: GameManager
-    @EnvironmentObject private var achievementManager: AchievementManager
+    @Environment(GameManager.self) private var gameManager
+    @Environment(AchievementManager.self) private var achievementManager
     @State private var showingSettings = false
     @State private var showingCustomStatements = false
     @State private var showingAchievements = false
@@ -30,25 +30,25 @@ struct MainMenuView: View {
                 )
                 .ignoresSafeArea()
                 
-                VStack(spacing: 60) {
+                VStack {
                     // Title
                     VStack(spacing: 20) {
                         Text("Never Have I Ever")
-                            .font(.system(size: 80, weight: .bold))
-                            .foregroundStyle(.white)
+                            .font(.title)
                         
                         Text("The Ultimate Party Game")
                             .font(.title2)
                             .foregroundStyle(.white.opacity(0.8))
                     }
-                    .padding(.top, 80)
+                    .padding(.top, 40)
+
                     
                     // Menu buttons
                     VStack(spacing: 30) {
                         NavigationLink {
                             GamePlayView()
-                                .environmentObject(gameManager)
-                                .environmentObject(achievementManager)
+                                .environment(gameManager)
+                                .environment(achievementManager)
                         } label: {
                             MenuButton(title: "Start Game", icon: "play.fill", color: .green)
                         }
@@ -170,17 +170,18 @@ struct MainMenuView: View {
                         .padding(.bottom, 40)
                 }
             }
+            .toolbar(.hidden, for: .navigationBar)
             .fullScreenCover(isPresented: $showingSettings) {
                 CategorySelectionView()
-                    .environmentObject(gameManager)
+                    .environment(gameManager)
             }
             .fullScreenCover(isPresented: $showingCustomStatements) {
                 CustomStatementsView()
-                    .environmentObject(gameManager)
+                    .environment(gameManager)
             }
             .fullScreenCover(isPresented: $showingAchievements) {
                 AchievementsView()
-                    .environmentObject(achievementManager)
+                    .environment(achievementManager)
             }
             .fullScreenCover(isPresented: $showingPremiumView) {
                 PremiumPurchaseView()
@@ -219,5 +220,6 @@ struct MenuButton: View {
 
 #Preview {
     MainMenuView()
-        .environmentObject(GameManager())
+        .environment(GameManager())
+        .environment(AchievementManager())
 }

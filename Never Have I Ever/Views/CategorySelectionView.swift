@@ -9,7 +9,7 @@ import SwiftUI
 
 /// View for selecting statement categories
 struct CategorySelectionView: View {
-    @EnvironmentObject private var gameManager: GameManager
+    @Environment(GameManager.self) private var gameManager
     @Environment(\.dismiss) private var dismiss
     @State private var showingPremiumView = false
     
@@ -97,9 +97,7 @@ struct CategorySelectionView: View {
                 
                 // Custom Only Toggle
                 Button {
-                    gameManager.useCustomOnly.toggle()
-                    // Save preference
-                    UserDefaults.standard.set(gameManager.useCustomOnly, forKey: "useCustomOnly")
+                    gameManager.toggleUseCustomOnly()
                 } label: {
                     HStack(spacing: 30) {
                         Image(systemName: gameManager.useCustomOnly ? "checkmark.square.fill" : "square")
@@ -184,7 +182,7 @@ struct CategorySelectionView: View {
 /// Category button component
 struct CategoryButton: View {
     let category: Statement.Category
-    @EnvironmentObject private var gameManager: GameManager
+    @Environment(GameManager.self) private var gameManager
     @Environment(\.isFocused) private var isFocused
     @State private var showingPremiumView = false
     
@@ -287,5 +285,5 @@ struct CategoryButton: View {
 
 #Preview {
     CategorySelectionView()
-        .environmentObject(GameManager())
+        .environment(GameManager())
 }

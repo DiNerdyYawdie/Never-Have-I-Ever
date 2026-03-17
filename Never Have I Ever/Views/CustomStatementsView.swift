@@ -9,7 +9,7 @@ import SwiftUI
 
 /// View for managing custom statements
 struct CustomStatementsView: View {
-    @EnvironmentObject private var gameManager: GameManager
+    @Environment(GameManager.self) private var gameManager
     @Environment(\.dismiss) private var dismiss
     @State private var newStatementText = ""
     @State private var showingAddAlert = false
@@ -153,7 +153,7 @@ struct CustomStatementsView: View {
 /// Row component for custom statement
 struct CustomStatementRow: View {
     let statement: Statement
-    @EnvironmentObject private var gameManager: GameManager
+    @Environment(GameManager.self) private var gameManager
     @Environment(\.isFocused) private var isFocused
     @State private var showingDeleteAlert = false
     
@@ -204,5 +204,5 @@ struct CustomStatementRow: View {
 
 #Preview {
     CustomStatementsView()
-        .environmentObject(GameManager())
+        .environment(GameManager())
 }

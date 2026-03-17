@@ -9,8 +9,8 @@ import SwiftUI
 
 /// Main game play view with card interface
 struct GamePlayView: View {
-    @EnvironmentObject private var gameManager: GameManager
-    @EnvironmentObject private var achievementManager: AchievementManager
+    @Environment(GameManager.self) private var gameManager
+    @Environment(AchievementManager.self) private var achievementManager
     @Environment(\.dismiss) private var dismiss
     @State private var cardOffset: CGFloat = 0
     @State private var cardRotation: Double = 0
@@ -133,9 +133,10 @@ struct GamePlayView: View {
         .onChange(of: achievementManager.newlyUnlockedAchievements) { oldValue, newValue in
             if let latest = newValue.last {
                 showingAchievement = latest
-                
+
                 // Auto-dismiss after 5 seconds
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                Task {
+                    try? await Task.sleep(for: .seconds(5))
                     withAnimation {
                         showingAchievement = nil
                     }
@@ -172,8 +173,8 @@ struct GamePlayView: View {
                 wasCustomOnly: gameManager.useCustomOnly,
                 totalPlayed: gameManager.usedStatements.count
             )
-            .environmentObject(gameManager)
-            .environmentObject(achievementManager)
+            .environment(gameManager)
+            .environment(achievementManager)
         }
     }
     
@@ -196,9 +197,10 @@ struct GamePlayView: View {
         }
         
         // Get next statement after animation
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        Task {
+            try? await Task.sleep(for: .milliseconds(300))
             gameManager.nextStatement()
-            
+
             // Check again if we've run out after getting the statement
             if gameManager.currentStatement == nil && gameManager.availableStatements.isEmpty {
                 gameManager.soundManager.playSound(.celebration)
@@ -206,7 +208,7 @@ struct GamePlayView: View {
             } else {
                 cardOffset = 1500
                 cardRotation = 15
-                
+
                 withAnimation {
                     cardOffset = 0
                     cardRotation = 0
@@ -284,5 +286,6 @@ struct EmptyStateCard: View {
 
 #Preview {
     GamePlayView()
-        .environmentObject(GameManager())
+        .environment(GameManager())
+        .environment(AchievementManager())
 }

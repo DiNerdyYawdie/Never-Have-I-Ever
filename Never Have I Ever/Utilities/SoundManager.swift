@@ -7,31 +7,29 @@
 
 import AVFoundation
 import SwiftUI
-import Combine
+
+// MARK: - SoundManager
 
 /// Manages sound effects for the app
-class SoundManager: ObservableObject {
-    @Published var isSoundEnabled: Bool = true
-    
+@Observable
+@MainActor
+final class SoundManager {
     static let shared = SoundManager()
-    
+
+    // MARK: - Properties
+
+    var isSoundEnabled: Bool = true
+
     private init() {
         setupAudioSession()
     }
-    
-    private func setupAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print("Failed to set up audio session: \(error)")
-        }
-    }
-    
+
+    // MARK: - Methods
+
     /// Play a system sound effect
     func playSound(_ soundType: SoundType) {
         guard isSoundEnabled else { return }
-        
+
         switch soundType {
         case .buttonTap:
             playSystemSound(1104) // Tock sound
@@ -45,11 +43,22 @@ class SoundManager: ObservableObject {
             playSystemSound(1053) // Alert sound
         }
     }
-    
+
+    // MARK: - Private
+
+    private func setupAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Failed to set up audio session: \(error)")
+        }
+    }
+
     private func playSystemSound(_ soundID: SystemSoundID) {
         AudioServicesPlaySystemSound(soundID)
     }
-    
+
     enum SoundType {
         case buttonTap
         case cardSwipe

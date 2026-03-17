@@ -9,7 +9,7 @@ import SwiftUI
 
 /// View displaying all achievements
 struct AchievementsView: View {
-    @EnvironmentObject private var achievementManager: AchievementManager
+    @Environment(AchievementManager.self) private var achievementManager
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -190,5 +190,5 @@ struct AchievementRow: View {
 
 #Preview {
     AchievementsView()
-        .environmentObject(AchievementManager())
+        .environment(AchievementManager())
 }
